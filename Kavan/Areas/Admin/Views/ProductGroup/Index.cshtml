@@ -1,0 +1,91 @@
+﻿
+@model IEnumerable<Kavan.Entity.Entity.ProductGroup>
+
+@{
+    ViewBag.Title = "index";
+    Layout = "/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+    .margin{
+        margin:5px 0;
+    }
+</style>
+<div>
+    <div class="margin">
+        <a href="/admin" class="btn btn-default" style="text-decoration:none;"><i></i>صفحه اصلی </a>
+    </div>
+    <div class="col-md-12 text-right">
+        <h2>لیست گروه</h2>
+        <div>
+            <a href="/admin/productGroup/create" class="btn btn-primary"> + اضافه کردن گروه بندی</a>
+        </div>
+        <br />
+    </div>
+
+    <div>
+        <table id="tblGroup" style="width:100%" class="table table-bordered table-sm table-striped">
+            <thead>
+                <tr class="text-center">
+                    <th class="text-center">نام گروه</th>
+                    <th style="width:50px">ویرایش</th>
+                    <th style="width:50px">حذف</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @if (ViewBag.productGroupList != null)
+                {
+                    @foreach (var item in ViewBag.productGroupList)
+                    {
+                        <tr class="text-center">
+                            <td class="text-center">@item.GroupName</td>
+
+                            <td class="text-center">
+                                <a class="edit" href="Edit/@item.Id"><i class="fa fa-edit btn btn-primary"></i></a>
+                            </td>
+
+                            <td class="text-center">
+                                <a class="delete" href="delete/@item.Id" data-id="@item.Id"><i class="fa fa-close btn btn-danger"></i></a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <p>مقداری یافت نشد.</p>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(document).on("click", ".delete", function (event) {
+                event.preventDefault();
+                var id = $(this).attr("data-id");
+                $.ajax({
+                    type: "POST",
+                    url: "delete/" + id,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (res) {
+                        if (res.isValid == true) {
+                            callbackAlert(res.message, function () {
+                                window.location.reload();
+                            });
+
+                        }
+                        else {
+                            callbackAlert(res.message, function () {
+                            });
+                        }
+                    },
+
+                });
+            });
+        });
+    </script>
+}
+

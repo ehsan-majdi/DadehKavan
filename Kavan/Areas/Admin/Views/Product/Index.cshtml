@@ -1,0 +1,87 @@
+﻿
+@model Kavan.Entity.Entity.ProductFeature
+@{
+    Layout = "/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "index";
+}
+<div>
+    <div class="text-right">
+        <a href="/admin/product/create" class="btn btn-primary">افزودن محصول</a>
+    </div>
+    <div class="margin">
+        <a href="/admin" class="btn btn-default" style="text-decoration:none;"><i></i>صفحه اصلی </a>
+    </div>
+    <br />
+    @if (ViewBag.productList != null)
+    {
+        <table id="tblProduct" style="width:100%" class="table table-bordered table-sm table-striped">
+            <thead>
+                <tr class="text-center">
+                    <th class="text-center">نام محصول</th>
+                    <th class="text-center">قیمت</th>
+                    <th class="text-center">نام ویژگی</th>
+                    <th class="text-center">نام گروه</th>
+                    <th class="text-center" style="width:50px">گالری</th>
+                    <th class="text-center" style="width:50px">افزودن عکس</th>
+                    <th class="text-center" style="width:50px">ویرایش</th>
+                    <th class="text-center" style="width:50px">حذف</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.productList)
+                {
+                    <tr class="text-center">
+                        <td class="text-center" id="title" data-id="@item.id">@item.productTitle</td>
+                        <td class="text-center" id="price" data-id="@item.id">@item.price</td>
+                        <td class="text-center" id="productFeatureName" data-id="@item.id">@item.productFeatureName</td>
+                        <td class="text-center" id="productFeatureName" data-id="@item.id">@item.productGroupName</td>
+
+                        <td class="text-center">
+                            <a class="gallery" href="Gallery/@item.id"><i class="fa fa-file btn btn-primary"></i></a>
+                        </td>
+
+                        <td class="text-center">
+                            <a class="upload" href="UploadFile/@item.id"><i class="fa fa-image btn btn-success"></i></a>
+                        </td>
+
+
+                        <td class="text-center">
+                            <a class="edit" href="Edit/@item.id"><i class="fa fa-edit btn btn-primary"></i></a>
+                        </td>
+
+                        <td class="text-center">
+                            <a class="delete" href="delete/@item.id" data-id="@item.id"><i class="fa fa-close btn btn-danger"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(document).on("click", ".delete", function (event) {
+                event.preventDefault();
+                var id = $(this).attr("data-id");
+                $.ajax({
+                    type: "POST",
+                    url: "delete/" + id,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (res) {
+                        if (res.isValid == true) {
+                            callbackAlert(res.message, function () {
+                                window.location.reload();
+                            });
+                        }
+                        else {
+                            alert("قادر به حذف این مقدار نیستید.")
+                        }
+                    },
+                });
+            });
+        });
+    </script>
+}

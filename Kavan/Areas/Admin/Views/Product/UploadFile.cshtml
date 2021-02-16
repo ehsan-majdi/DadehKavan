@@ -1,0 +1,45 @@
+﻿@model Kavan.Entity.Entity.ProductImage
+@{
+    ViewBag.Title = "UploadFile";
+    Layout = "/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="container">
+
+
+    @using (Html.BeginForm("CreateImage", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+
+        <div class="form-horizontal">
+            <h4>آپلود تصویر محصول</h4>
+            <hr />
+            <input type="hidden" id="hiddenId" name="ProductId" value="@ViewBag.Id" />
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="form-group text-right">
+                        <label>آپلود عکس</label>
+                        <div>
+                            <input type="file" id="Avatar" class="form-control" name="upload" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="ذخیره" class="btn btn-success"/>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //var avatar = $("#avatar").val();
+            //$("#FileName").val(avatar);
+        });
+    </script>
+}
+

@@ -1,0 +1,82 @@
+﻿
+@{
+}
+<style>
+    .bold {
+        font-weight: 700;
+    }
+
+    .red {
+        color: red;
+    }
+
+    .item-grid {
+        display: inline-block;
+        text-align: right;
+        width: 50%;
+        float: right;
+    }
+
+    .border-item {
+        border: 2px solid red;
+        border-radius: 15px;
+    }
+</style>
+<div>
+    <br />
+
+    <div class="row">
+        <div class="col-md-12">
+            @foreach (var item in ViewBag.productList)
+            {
+            <div class="col-md-3">
+                @if (item.image != null)
+                {
+                    <a class="product-item" href="/home/product/@item.id" style="text-decoration:none">
+                        <img src="@Url.Content("~/image/" + item.image)" alt="@item.image" height="250" width="250" />
+                    </a>
+                }
+                else
+                {
+                    <img src="~/logo/index.png" alt="" height="250" width="250" />
+                }
+
+                <div>
+                    <p class="item-grid">
+                        نام محصول:
+                    </p>
+
+                    <p class="bold">
+                        @item.productTitle
+                    </p>
+                </div>
+                <div>
+                    <p class="item-grid">
+                        ویژگی:
+                    </p>
+                    <p class="bold">
+                        @item.productFeatureName
+                    </p>
+                </div>
+
+                <div>
+                    <p class="item-grid">
+
+                        قیمت نهایی محصول:
+                    </p>
+                    <p class="red bold">
+                        @item.price&nbsp;<span>تومان</span>
+                    </p>
+
+
+                </div>
+
+                <hr />
+            </div>
+            }
+        </div>
+
+    </div>
+
+
+</div>

@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+    Layout = "/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+    label{
+        display:block;
+        text-align:right;
+    }
+    h3{
+        text-align:right
+    }
+</style>
+<div style="margin:50px 0;">
+    @using (Html.BeginForm("Create", "ProductFeature", FormMethod.Post))
+    {
+        <h3>ویژگی محصول</h3>
+        <hr />
+        <div class="col-md-4 col-lg-offset-4">
+            <div class="form-group">
+                <label>عنوان</label>
+                <input name="Name" class="form-control" type="text" placeholder="عنوان" />
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-offset-4">
+            <div class="form-group">
+                <label>قیمت</label>
+                <input name="Price" class="form-control" type="text" placeholder="قیمت" />
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-offset-4">
+            <br />
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">ذخیره</button>
+            </div>
+        </div>
+    }
+</div>
+

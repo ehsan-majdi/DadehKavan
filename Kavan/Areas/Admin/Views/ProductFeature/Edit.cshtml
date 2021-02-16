@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "Edit";
+    Layout = "/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="container">
+    @using (Html.BeginForm("Update", "ProductFeature", FormMethod.Post))
+    {
+        <input id="hiddenId" type="hidden" value="@ViewBag.Id" name="Id" />
+        <div class="row">
+            <div class="col-md-3">
+                <label>عنوان</label>
+                <input class="form-control" type="text" name="Name" value="@ViewBag.Name" placeholder="عنوان" />
+            </div>
+            <div class="col-md-3">
+                <label>قیمت</label>
+                <input class="form-control" type="text" name="Price" value="@ViewBag.Price" placeholder="قیمت" />
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success">ذخیره</button>
+    }
+</div>

@@ -1,0 +1,105 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+    Layout = "/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+    label {
+        text-align: right
+    }
+</style>
+<div class="container">
+    <form id="form">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group text-right">
+                    <label>عنوان</label>
+                    <input id="title" name="title" class="form-control" type="text" placeholder="عنوان" />
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group text-right">
+                    <label>قیمت</label>
+                    <input id="price" name="price" class="form-control" type="text" placeholder="قیمت" />
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group text-right">
+                    <label>ویژگی</label>
+                    <select id="feature" name="" class="form-control">
+                        <option>...</option>
+                        @foreach (var item in ViewBag.ProductFeature)
+                        {
+                            <option value="@item.Id">@item.Name - @item.Price</option>
+                        }
+                    </select>
+
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group text-right">
+                    <label>گروه بندی محصولات</label>
+                    <select id="group" class="form-control">
+                        <option>...</option>
+                        @foreach (var item in ViewBag.productGroup)
+                        {
+                            <option value="@item.Id">@item.GroupName</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>توضیحات</label>
+                    <textarea id="description" name="description" class="form-control" type="text" placeholder="توضیحات"></textarea>
+                </div>
+            </div>
+
+        </div>
+    </form>
+    <button id="submit" type="submit" class="btn btn-success">ذخیره</button>
+
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(document).on("click", "#submit", function (event) {
+                event.preventDefault();
+                var featureValue = $("#feature option:selected").html().split("-");
+                var featurePrice = featureValue[1];
+
+                var entity = {
+                    productFeatureId: $('#feature option:selected').val(), 
+                    productGroupId: $('#group option:selected').val() ,
+                    name: $("#title").val(),
+                    price: Number($("#price").val()) + Number(featurePrice),
+                    description: $("#description").val()
+                };
+
+                $.ajax({
+                    type: "Get",
+                    url: 'Save',
+                    traditional: true,
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "Json",
+                    data: entity,
+                    success: function (res) {
+                        if (res.isValid == true) {
+                            callbackAlert(res.message, function () {
+                                window.location.href = "/admin/product/index";
+                            });
+                        }
+                        else {
+                            callbackAlert(res.message)
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

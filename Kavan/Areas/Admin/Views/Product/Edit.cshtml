@@ -1,0 +1,145 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+    Layout = "/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+    label {
+        text-align: right
+    }
+</style>
+<div class="container">
+
+    <form id="form">
+        <div class="row">
+            <input id="hiddenId" type="hidden" value="@ViewBag.Id" name="id" />
+
+            <div class="col-md-3">
+                <div class="form-group text-right">
+                    <label>عنوان</label>
+                    <input id="title" name="productTitle" class="form-control" type="text" placeholder="عنوان" maxlength="50"/>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group text-right">
+                    <label>قیمت</label>
+                    <input id="price" name="price" class="form-control compare" type="text" placeholder="قیمت" />
+                    <input id="sum" name="sum" class="form-control" type="hidden" />
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group text-right">
+                    <label>ویژگی</label>
+                    <select id="cmbFeature" name="productFeatureId" class="form-control compare">
+                        <option value="">...</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group text-right">
+                    <label>گروه بندی محصولات</label>
+                    <select id="cmbGroup" name="productGroupId" class="form-control">
+                        <option value="">...</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>توضیحات</label>
+                    <textarea id="description" name="description" class="form-control" type="text" placeholder="توضیحات" maxlength="900"></textarea>
+                </div>
+            </div>
+        </div>
+    </form>
+    <button id="submit" type="submit" class="btn btn-success">ذخیره</button>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".compare").change(function () {
+                var featureValue = $("#cmbFeature option:selected").html().split("-");
+                var featurePrice = featureValue[1];
+                var price = Number($("#price").val());
+                price = Number(featurePrice) + price;
+                $("#sum").val(price);
+            });
+
+            $("#submit").on("click", function (event) {
+                event.preventDefault();
+                //var featureValue = $("#cmbFeature option:selected").html().split("-");
+                //var featurePrice = featureValue[1];
+                if ($("#sum").val() > 0) {
+                    var entity = {
+                        id: $("#hiddenId").val(),
+                        productFeatureId: $('#cmbFeature option:selected').val(),
+                        productGroupId: $('#cmbGroup option:selected').val(),
+                        name: $("#title").val(),
+                        price: Number($("#sum").val()),
+                        description: $("#description").val()
+                    };
+                } else {
+                    var entity = {
+                        id: $("#hiddenId").val(),
+                        productFeatureId: $('#cmbFeature option:selected').val(),
+                        productGroupId: $('#cmbGroup option:selected').val(),
+                        name: $("#title").val(),
+                        price: $("#price").val(),
+                        description: $("#description").val()
+                    };
+                }
+                $.ajax({
+                    type: "Get",
+                    url: '/admin/product/Update',
+                    contentType: "application/json;",
+                    dataType: "Json",
+                    data: entity,
+                    success: function (res) {
+                        if (res.isValid == true) {
+                            console.log(res);
+                            callbackAlert(res.message, function () {
+                                window.location.href = "/admin/product/index";
+                            });
+                        }
+                        else {
+                            callbackAlert(res.message)
+                        }
+                    }
+                });
+            });
+            loadRemoteSelect("#cmbFeature", "/admin/product/GetAllFeature", null, "id", "title", "...", function (res) {
+                load();
+            });
+
+            loadRemoteSelect("#cmbGroup", "/admin/product/GetAllGroup", null, "id", "title", "...", function (res) {
+                load();
+            });
+
+        });
+
+        function load() {
+            var id = $("#hiddenId").val();
+            if (id > 0) {
+                $.get("/admin/product/load/" + id, function (res) {
+                    if (res.isValid == true) {
+                        var entity = res.data;
+                        $("#title").val(entity.productTitle);
+                        $("#price").val(entity.price);
+                        $("#cmbFeature").val(entity.productFeatureId);
+                        $("#cmbGroup").val(entity.productGroupId);
+                        $("#description").val(entity.description);
+                        $("#feature").val(entity.feature);
+                    }
+                    else {
+                        alert(res.message);
+                    }
+                });
+            }
+        }
+    </script>
+}

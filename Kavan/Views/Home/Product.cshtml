@@ -1,0 +1,43 @@
+﻿
+@{
+}
+<style>
+    hr {
+        border: 0;
+        clear: both;
+        display: block;
+        width: 96%;
+        background-color: #000000;
+        height: 1px;
+    }
+</style>
+<div>
+
+    <div class="row">
+        <div class="">
+            @foreach (var item in ViewBag.productList)
+            {
+                <div class="col-md-3">
+                    <img src="@Url.Content("~/image/" + item.image)" alt="@item.image" height="250" width="250" style="margin:5px" />
+
+                </div>
+                <div style="display:inline-block">
+                    <h3>@item.productTitle</h3>
+                </div>
+                <div>
+                    <button class="btn btn-danger">افزودن به سبد خرید</button>
+                </div>
+            }
+        </div>
+    </div>
+    <div>
+        <hr/>
+    </div>
+    <footer style="margin: 80px 0px;">
+        @foreach (var item in ViewBag.gallery)
+        {
+            <img src="@Url.Content("~/image/" + item.FileName)" alt="@item.FileName" height="150" width="150" style="margin:5px" />
+        }
+    </footer>
+
+</div>
